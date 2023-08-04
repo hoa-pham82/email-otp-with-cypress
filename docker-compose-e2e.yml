@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+    e2e:
+        container_name: e2e
+        build:
+            dockerfile: Dockerfile
+        environment:
+            - CYPRESS_WEB_HOST=http://web:3000
+        entrypoint: ['./scripts/entrypoint.sh']
