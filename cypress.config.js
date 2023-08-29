@@ -1,4 +1,4 @@
-const { defineConfig } = require("cypress");
+const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
   e2e: {
@@ -6,10 +6,8 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
     specPattern: ['cypress/e2e/**/*.cy.{js,jsx,ts,tsx}', '**/*/*.feature'],
-		screenshotOnRunFailure: true,
-		video: false,
+    screenshotOnRunFailure: true,
+    video: false,
     experimentalOriginDependencies: false,
-    baseUrl: 'https://playground.mailslurp.com'
-
   },
 });

@@ -1,6 +1,7 @@
 # Folders
 node_modules
 screenshots
+.vscode
 
 # Log files
 npm-debug.log*
