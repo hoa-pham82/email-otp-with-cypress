@@ -1,22 +1,31 @@
+describe('Email OTP', { baseUrl: 'https://playground.mailslurp.com' }, () => {
+  let username = 'hoa.pham' + Math.floor(Math.random() * 10000).toString();
+  let password = Math.floor(Math.random() * 100000000).toString();
 
+  it('Register account in Mailslurp', () => {
+    cy.visit('/');
+    // cy.get('[data-test="username-input"]');
+    // cy.get('[data-test="sign-in-password-input"]');
+    cy.get('[data-test="sign-in-create-account-link"]').click();
 
-describe('Email OTP',{baseUrl:'https://playground.mailslurp.com'}, ()=>{
-    it('register account', ()=> {
-        let username = 'hoa.pham' + Math.floor(Math.random()*10000).toString();
-        cy.visit('/');
-        // cy.get('[data-test="username-input"]');
-        // cy.get('[data-test="sign-in-password-input"]');
-        cy.get('[data-test="sign-in-create-account-link"]').click();
-        cy.get('[name=email]').type(`${username}` + '@mailsac.com');
-        cy.get('[name=password]').type('12345678');
-        cy.get('[data-test="sign-up-create-account-button"]').click();
-        cy.contains('Confirm Sign Up');
-    })
+    cy.get('[name=email]').type(`${username}` + '@mailsac.com');
+    cy.get('[name=password]').type(`${password}`);
+    cy.log('username', `${username}@mailsac.com`);
+    cy.log('password', `${password}`);
 
-    it('get otp', {baseUrl: 'https://mailsac.com'}, ()=> {       
-            cy.visit('/');
-            cy.get('.myinbox').type(`${username}`);
-            cy.get('.btn-primary').should('be.visible').click();
-            cy.contains('Please confirm your email address')
-        });       
-    })
+    cy.get('[data-test="sign-up-create-account-button"]').click();
+
+    cy.contains('Confirm Sign Up');
+
+    cy.getOTP(
+      `${username}@mailsac.com`,
+      'k_C9bc2iaYtYD1OX1aNVpSpJ2YeViE5bCJSVIVgO1fcs'
+    ).then(() => {
+      cy.log(Cypress.env('OTP'));
+
+      cy.get('[name=code]').type(Cypress.env('OTP'));
+
+      cy.get('[data-test="confirm-sign-up-confirm-button"]').click();
+    });
+  });
+});

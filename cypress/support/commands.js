@@ -23,3 +23,49 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+// Create the command to get OTP from mailsac.com
+
+let messageId;
+
+function getCode(message) {
+  const otpPattern = /\d+/;
+  const otpMatch = message.match(otpPattern);
+  if (otpMatch) {
+    console.log('extracted OTP', otpMatch[0]);
+    return otpMatch[0];
+  } else {
+    console.log('no OTP in the message');
+  }
+}
+
+Cypress.Commands.add('getOTP', (email, key) => {
+  cy.request({
+    method: 'GET',
+    url: 'https://mailsac.com/api/addresses/' + `${email}` + '/messages',
+    headers: {
+      'Mailsac-Key': key,
+    },
+  }).as('getMessageId');
+
+  cy.get('@getMessageId')
+    .then((res) => {
+      expect(res.status).to.eq(200);
+      messageId = res.body[0]._id;
+      cy.log(messageId);
+    })
+    .then(() => {
+      cy.request({
+        method: 'GET',
+        url: 'https://mailsac.com/api/text/' + `${email}/` + `${messageId}`,
+        headers: {
+          'Mailsac-Key': key,
+        },
+      });
+    })
+    .then((res) => {
+      expect(res.status).to.equal(200);
+      Cypress.env('OTP', getCode(res.body));
+      cy.log(Cypress.env('OTP'));
+    });
+});
