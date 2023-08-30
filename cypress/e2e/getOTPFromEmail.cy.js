@@ -4,8 +4,7 @@ describe('Email OTP', { baseUrl: 'https://playground.mailslurp.com' }, () => {
 
   it('Register account in Mailslurp', () => {
     cy.visit('/');
-    // cy.get('[data-test="username-input"]');
-    // cy.get('[data-test="sign-in-password-input"]');
+
     cy.get('[data-test="sign-in-create-account-link"]').click();
 
     cy.get('[name=email]').type(`${username}` + '@mailsac.com');
@@ -17,15 +16,17 @@ describe('Email OTP', { baseUrl: 'https://playground.mailslurp.com' }, () => {
 
     cy.contains('Confirm Sign Up');
 
-    cy.getOTP(
-      `${username}@mailsac.com`,
-      'k_C9bc2iaYtYD1OX1aNVpSpJ2YeViE5bCJSVIVgO1fcs'
-    ).then(() => {
+    cy.getOTP(`${username}@mailsac.com`, Cypress.env('API_KEY')).then(() => {
       cy.log(Cypress.env('OTP'));
 
       cy.get('[name=code]').type(Cypress.env('OTP'));
 
       cy.get('[data-test="confirm-sign-up-confirm-button"]').click();
     });
+
+    // need to check whether we can sign in successfully
+
+    // cy.get('[data-test="username-input"]');
+    // cy.get('[data-test="sign-in-password-input"]');
   });
 });
