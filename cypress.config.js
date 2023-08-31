@@ -1,13 +1,16 @@
-const { defineConfig } = require('cypress');
+const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
-  e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
+    e2e: {
+        setupNodeEvents(on, config) {
+            // implement node event listeners here
+        },
+        specPattern: ['cypress/e2e/**/*.cy.{js,jsx,ts,tsx}', '**/*/*.feature'],
+        screenshotOnRunFailure: true,
+        video: false,
+        experimentalOriginDependencies: false
     },
-    specPattern: ['cypress/e2e/**/*.cy.{js,jsx,ts,tsx}', '**/*/*.feature'],
-    screenshotOnRunFailure: true,
-    video: false,
-    experimentalOriginDependencies: false,
-  },
-});
+    env: {
+        API_KEY: ''
+    }
+})
