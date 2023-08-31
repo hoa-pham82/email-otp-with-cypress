@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+    cypress: cypress-io/cypress@3
 
 jobs:
     test-e2e:
@@ -9,6 +11,7 @@ jobs:
             - run:
                   name: Run e2e tests
                   command: bash ./scripts/run-e2e-tests.sh
+            - start-command: 'npm run start'
             - store_artifacts:
                   path: /tmp/e2e-videos/
 
@@ -16,4 +19,5 @@ workflows:
     test-build:
         jobs:
             # test only
+
             - test-e2e
