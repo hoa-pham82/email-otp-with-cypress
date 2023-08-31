@@ -1,27 +1,12 @@
 version: 2.1
-# orbs:
-#     cypress: cypress-io/cypress@3
-
-jobs:
-    test-e2e:
-        docker:
-            - image: cimg/node:20.5.1
-        steps:
-            - checkout
-            - run:
-                  name: Install package
-                  command: npm install
-            - run:
-                  name: Install dependency
-                  command: sudo apt-get update libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-            - run:
-                  name: Run e2e tests
-                  command: bash ./scripts/run-e2e-tests.sh
-            - store_artifacts:
-                  path: /tmp/e2e-videos/
-
+orbs:
+    # "cypress-io/cypress@3" installs the latest published
+    # version "s.x.y" of the orb. We recommend you then use
+    # the strict explicit version "cypress-io/cypress@3.x.y"
+    # to lock the version and prevent unexpected CI changes
+    cypress: cypress-io/cypress@3
 workflows:
-    test-build:
+    build:
         jobs:
-            # test only
-            - test-e2e
+            - cypress/run: # "run" job comes from "cypress" orb
+                  cypress-command: 'npx cypress run'
