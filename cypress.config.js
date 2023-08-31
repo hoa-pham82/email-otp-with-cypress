@@ -8,7 +8,8 @@ module.exports = defineConfig({
         specPattern: ['cypress/e2e/**/*.cy.{js,jsx,ts,tsx}', '**/*/*.feature'],
         screenshotOnRunFailure: true,
         video: false,
-        experimentalOriginDependencies: false
+        experimentalOriginDependencies: false,
+        retries: 1
     },
     env: {
         API_KEY: ''
