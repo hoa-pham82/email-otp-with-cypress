@@ -30,6 +30,6 @@ describe('Email OTP', { baseUrl: 'https://playground.mailslurp.com' }, () => {
         cy.get('[data-test="username-input"]').type(`${email}`)
         cy.get('[data-test="sign-in-password-input"]').type(`${password}`)
         cy.get('[data-test="sign-in-sign-in-button"]').click()
-        cy.contains('Welcome')
+        cy.contains('Welcome', { timeout: 10000 })
     })
 })
