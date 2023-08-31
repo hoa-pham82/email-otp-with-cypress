@@ -25,47 +25,39 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 // Create the command to get OTP from mailsac.com
+import { getCode } from './utils.js'
 
-let messageId;
+let messageId
+let baseUrl = 'https://mailsac.com/api'
 
-function getCode(message) {
-  const otpPattern = /\d+/;
-  const otpMatch = message.match(otpPattern);
-  if (otpMatch) {
-    console.log('extracted OTP', otpMatch[0]);
-    return otpMatch[0];
-  } else {
-    console.log('no OTP in the message');
-  }
-}
-
+// Create command to get OTP
 Cypress.Commands.add('getOTP', (email, key) => {
-  cy.request({
-    method: 'GET',
-    url: 'https://mailsac.com/api/addresses/' + `${email}` + '/messages',
-    headers: {
-      'Mailsac-Key': key,
-    },
-  }).as('getMessageId');
-
-  cy.get('@getMessageId')
-    .then((res) => {
-      expect(res.status).to.eq(200);
-      messageId = res.body[0]._id;
-      cy.log(messageId);
-    })
-    .then(() => {
-      cy.request({
+    cy.request({
         method: 'GET',
-        url: 'https://mailsac.com/api/text/' + `${email}/` + `${messageId}`,
+        url: baseUrl + `/addresses/${email}/messages`,
         headers: {
-          'Mailsac-Key': key,
-        },
-      });
-    })
-    .then((res) => {
-      expect(res.status).to.equal(200);
-      Cypress.env('OTP', getCode(res.body));
-      cy.log(Cypress.env('OTP'));
-    });
-});
+            'Mailsac-Key': key
+        }
+    }).as('getMessageId')
+
+    cy.get('@getMessageId')
+        .then((res) => {
+            expect(res.status).to.eq(200)
+            messageId = res.body[0]._id
+            cy.log('Retrieved messageId:', messageId)
+        })
+        .then(() => {
+            cy.request({
+                method: 'GET',
+                url: baseUrl + `/text/${email}/${messageId}`,
+                headers: {
+                    'Mailsac-Key': key
+                }
+            })
+        })
+        .then((res) => {
+            expect(res.status).to.equal(200)
+            Cypress.env('OTP', getCode(res.body))
+            cy.log('Set the OTP value is:', Cypress.env('OTP'))
+        })
+})
