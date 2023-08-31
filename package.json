@@ -4,7 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "cy:run": "cypress run"
+        "cy:run": "cypress run",
+        "cy:ci": "npm install && cypress run"
     },
     "keywords": [],
     "author": "",
