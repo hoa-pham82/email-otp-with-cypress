@@ -9,9 +9,9 @@ module.exports = defineConfig({
         screenshotOnRunFailure: true,
         video: false,
         experimentalOriginDependencies: false,
-        retries: 1
+        retries: 0
     },
     env: {
-        API_KEY: ''
+        API_KEY: 'k_XEzM1XTlG0PzYxaG9ERBbXrhrOt7LXnd'
     }
 })
