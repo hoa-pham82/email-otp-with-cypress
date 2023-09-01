@@ -30,15 +30,15 @@ import { getCode } from './utils.js'
 let messageId
 let baseUrl = 'https://mailsac.com/api'
 
-// Create command to get OTP
-Cypress.Commands.add('getOTP', (email, key) => {
-    cy.request({
-        method: 'GET',
-        url: baseUrl + `/addresses/${email}/messages`,
-        headers: {
-            'Mailsac-Key': key
-        }
-    })
+function getMessageId(email, key) {
+    return cy
+        .request({
+            method: 'GET',
+            url: baseUrl + `/addresses/${email}/messages`,
+            headers: {
+                'Mailsac-Key': key
+            }
+        })
         .then((res) => {
             expect(res.status).to.eq(200)
             if (res.body && res.body.length > 0) {
@@ -48,20 +48,26 @@ Cypress.Commands.add('getOTP', (email, key) => {
                 cy.log(
                     'Response body is empty or does not contain expected data.'
                 )
+                getMessageId(email, key)
             }
         })
-        .then(() => {
-            cy.request({
-                method: 'GET',
-                url: baseUrl + `/text/${email}/${messageId}`,
-                headers: {
-                    'Mailsac-Key': key
-                }
-            })
-        })
-        .then((res) => {
-            expect(res.status).to.equal(200)
-            Cypress.env('OTP', getCode(res.body))
-            cy.log('Set the OTP value is:', Cypress.env('OTP'))
-        })
+}
+
+function getOTP(email, key) {
+    cy.request({
+        method: 'GET',
+        url: baseUrl + `/text/${email}/${messageId}`,
+        headers: {
+            'Mailsac-Key': key
+        }
+    }).then((res) => {
+        expect(res.status).to.equal(200)
+        Cypress.env('OTP', getCode(res.body))
+        cy.log('Set the OTP value is:', Cypress.env('OTP'))
+    })
+}
+
+// Create command to get OTP
+Cypress.Commands.add('getOTP', (email, key) => {
+    getMessageId(email, key).then((messageId) => getOTP(email, key))
 })
