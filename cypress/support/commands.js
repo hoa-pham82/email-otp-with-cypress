@@ -41,9 +41,14 @@ Cypress.Commands.add('getOTP', (email, key) => {
     })
         .then((res) => {
             expect(res.status).to.eq(200)
-            console.log(res.body)
-            messageId = res.body[0]._id
-            cy.log('Retrieved messageId:', messageId)
+            if (res.body && res.body.length > 0) {
+                messageId = res.body[0]._id
+                cy.log('Retrieved messageId:', messageId)
+            } else {
+                cy.log(
+                    'Response body is empty or does not contain expected data.'
+                )
+            }
         })
         .then(() => {
             cy.request({
