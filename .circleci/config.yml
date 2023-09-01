@@ -1,12 +1,32 @@
 version: 2.1
-orbs:
-    # "cypress-io/cypress@3" installs the latest published
-    # version "s.x.y" of the orb. We recommend you then use
-    # the strict explicit version "cypress-io/cypress@3.x.y"
-    # to lock the version and prevent unexpected CI changes
-    cypress: cypress-io/cypress@3
-workflows:
+
+jobs:
+    test-e2e:
+        macos:
+            xcode: '14.2.0'
+        steps:
+            - checkout
+            - run:
+                  name: Install dependencies
+                  command: npm install
+            - run:
+                  name: Run e2e test
+                  command: ./scripts/run-e2e-tests.sh
+
     build:
+        docker:
+            - image: cimg/base:2022.09
+        steps:
+            - checkout
+            - run:
+                  name: install node
+                  command: npm install
+            - run:
+                  name: check node version
+                  command: node -v
+
+workflows:
+    test_my_app:
         jobs:
-            - cypress/run: # "run" job comes from "cypress" orb
-                  cypress-command: 'npx cypress run'
+            - build
+            - test-e2e
