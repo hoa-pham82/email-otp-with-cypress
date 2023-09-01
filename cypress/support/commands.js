@@ -38,9 +38,7 @@ Cypress.Commands.add('getOTP', (email, key) => {
         headers: {
             'Mailsac-Key': key
         }
-    }).as('getMessageId')
-
-    cy.get('@getMessageId')
+    })
         .then((res) => {
             expect(res.status).to.eq(200)
             messageId = res.body[0]._id
