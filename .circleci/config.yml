@@ -29,4 +29,6 @@ workflows:
     test_my_app:
         jobs:
             - build
-            - test-e2e
+            - test-e2e:
+                  requires:
+                      - build
