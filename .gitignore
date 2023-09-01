@@ -2,6 +2,7 @@
 node_modules
 screenshots
 .vscode
+*/videos
 
 # Log files
 npm-debug.log*

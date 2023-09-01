@@ -41,6 +41,7 @@ Cypress.Commands.add('getOTP', (email, key) => {
     })
         .then((res) => {
             expect(res.status).to.eq(200)
+            console.log(res.body)
             messageId = res.body[0]._id
             cy.log('Retrieved messageId:', messageId)
         })
