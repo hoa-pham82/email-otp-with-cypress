@@ -1,16 +1,11 @@
 # email-otp-with-cypress
 
-Create Cypress script for email OTP scenario
+Created Cypress script for email OTP scenario
 
-The scenario: User Signup that requires an OTP code from the registered email
-
-Given the user is on the signup page
-
-When the user fills out the signup form with valid information and submits the form
-
-Then the user should navigate to the OTP screen and an OTP will be sent to their email address
-
-When the user puts in the OTP to the screen
-
-Then they can register the account successfully
+ 	Scenario: User Signup that requires an valid OTP code from the registered email
+		GIVEN the user is on the signup page
+		AND the user filled out the signup form with valid information and submitted the form
+		AND the user is in the OTP screen and an OTP is sent to their email address
+		WHEN the user puts in the OTP to the signup screen
+		THEN the user registers the account successfully
 
